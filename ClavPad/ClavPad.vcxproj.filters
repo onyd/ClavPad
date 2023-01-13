@@ -21,12 +21,39 @@
     <ClCompile Include="InputSender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="KeyboardAdapter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ClavPad.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="optitrack_minimal_sc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OptitrackData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidBody.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InputSender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="geometry.h">
+    <ClInclude Include="KeyboardAdapter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ClavPad.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="optitrack_minimal_sc.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OptitrackData.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RigidBody.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
