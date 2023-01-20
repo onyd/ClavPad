@@ -1,19 +1,15 @@
-#include "InputSender.h"
-
 #include <cmath>
 #include <iostream>
 
+#include "InputSender.h"
 #include "ClavPad.hpp"
+
 
 int main()
 {
-	/*InputSender sender;
-	while (true) {
-		sender.SendWheelMove(-5);
-		Sleep(100);
-	}
-	return 0;*/
-
 	ClavPad clav;
+	clav.calibrate();
+
 	clav.run();
+	clav.printActivity();
 }

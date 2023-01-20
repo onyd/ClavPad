@@ -21,6 +21,8 @@ public:
     // vector of the vec3s of the different markers which we will stick to the fingers   
     std::vector<glm::vec3> markers;
 
+    glm::quat reference_orientation;
+
     // get raw data from the optitrack
     void update();
 private:

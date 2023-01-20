@@ -1,11 +1,7 @@
 #include "KeyboardAdapter.h"
 
-KeyboardAdapter::KeyboardAdapter()
-{
-}
-
-KeyboardAdapter::KeyboardAdapter(const glm::vec3& origin, const glm::quat& orientation, float width, float height)
-    : m_origin(origin), m_orientation(orientation)
+KeyboardAdapter::KeyboardAdapter(const glm::vec3& origin, const glm::quat& reference_orientation, const glm::quat& orientation, float width, float height)
+    : m_origin(origin), m_reference_orientation(reference_orientation), m_orientation(orientation)
 {
     RECT desktop;
 
@@ -20,13 +16,13 @@ KeyboardAdapter::KeyboardAdapter(const glm::vec3& origin, const glm::quat& orien
 
 glm::vec3 KeyboardAdapter::toLocal(const glm::vec3& point)
 {
-    return glm::conjugate(m_orientation) * (point - m_origin);
+    return glm::conjugate(m_orientation * m_reference_orientation) * (point - m_origin);
 }
 
 std::optional<Point> KeyboardAdapter::toScreen(const glm::vec3& point)
 {
     glm::vec3 p = toLocal(point);
-    glm::vec2 projection = glm::vec2(p.x, p.y) * m_scale_factor + glm::vec2(m_screen_width, m_screen_height) / 2.0f;
+    glm::vec2 projection = -glm::vec2(p.y, p.x) * m_scale_factor + glm::vec2(m_screen_width, m_screen_height) / 2.0f;
 
     // Not in boundaries
     if (!(0 < projection.x && projection.x < m_screen_width))

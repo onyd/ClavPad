@@ -17,17 +17,13 @@ class RigidBody {
         // positions of the markers forming the boundary of the keyboard
         std::vector<glm::vec3> markers;
 
-        float length;
-
-        float width;
-
         // Constructor
         RigidBody() {};
 
-        RigidBody(glm::vec3 origin, glm::quat orientation, std::vector<glm::vec3> markers){
-            origin = origin;
-            orientation = orientation;
-            markers = markers;
+        RigidBody(glm::vec3 _origin, glm::quat _orientation, std::vector<glm::vec3> _markers){
+            origin = _origin;
+            orientation = _orientation;
+            markers = _markers;
         }
 
         RigidBody(const RigidBody &rigiBody) {
@@ -36,7 +32,6 @@ class RigidBody {
             markers = rigiBody.markers;
         }
 
-        void ComputeKeyBoardDimensions();
 };
 
 #endif

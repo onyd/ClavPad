@@ -11,8 +11,9 @@ typedef std::pair<int, int> Point;
 class KeyboardAdapter
 {
 public:
-	KeyboardAdapter();
-	KeyboardAdapter(const glm::vec3& origin, const glm::quat& orientation, 
+	KeyboardAdapter(const glm::vec3& origin, 
+					const glm::quat& reference_orientation,
+					const glm::quat& orientation,
 					float width, float height);
 	 
 	glm::vec3 toLocal(const glm::vec3& point);
@@ -25,6 +26,7 @@ public:
 
 private:
 	glm::vec3 m_origin;
+	glm::quat m_reference_orientation;
 	glm::quat m_orientation;
 	glm::vec2 m_scale_factor;
 	long m_screen_width, m_screen_height;
