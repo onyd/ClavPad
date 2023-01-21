@@ -3,6 +3,7 @@
 #include <chrono>
 #include <vector>
 #include <deque>
+#include <string>
 
 #include "OptitrackData.hpp"
 #include "KeyboardAdapter.h"
@@ -29,6 +30,7 @@ public:
     void run();
 
     void printActivity() const;
+    void saveActivity(const std::string& path);
 
 private:
     void update();

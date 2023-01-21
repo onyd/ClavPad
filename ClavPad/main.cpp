@@ -11,5 +11,5 @@ int main()
 	clav.calibrate();
 
 	clav.run();
-	clav.printActivity();
+	clav.saveActivity("C:\\Local_documents\\clavpad-project\\experiments\\activity.json");
 }

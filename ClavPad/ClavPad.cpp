@@ -1,6 +1,7 @@
 #include "ClavPad.hpp"
 
 #include <iostream>
+#include <fstream>
 #include <conio.h>
 
 #include "optitrack_minimal_sc.hpp"
@@ -166,6 +167,24 @@ void ClavPad::printActivity() const
         std::cout << state_names[(int)state] << ": " << std::to_string(duration.count()) << " ms\n";
     }
 }
+
+void ClavPad::saveActivity(const std::string& path)
+{
+    std::ofstream out_file(path);
+    out_file << "[\n";
+
+    auto it = m_activity.begin();
+    out_file << "{" << "\"" << state_names[(int)it->first] << "\" : " << std::to_string(it->second.count()) << "}";
+    ++it;
+    while (it != m_activity.end()) {
+        const auto& [state, duration] = *it++;
+        out_file << ",\n{" << "\"" << state_names[(int)state] << "\" : " << std::to_string(duration.count()) << "}";
+    }
+    out_file << "\n]";
+
+    out_file.close();
+}
+
 
 bool ClavPad::updateState(State new_state)
 {
