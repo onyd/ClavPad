@@ -4,10 +4,10 @@
 #include "InputSender.h"
 #include "ClavPad.hpp"
 
-
+                 
 int main()
 {
-	ClavPad clav;
+	ClavPad clav(true);
 	clav.calibrate();
 
 	clav.run();

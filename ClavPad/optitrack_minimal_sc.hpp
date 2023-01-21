@@ -57,13 +57,13 @@ int open_udp_multicast_socket(int port, const char* mcastGroup, bool_t blocking,
 //      scope of this function. 
 //
 // *********************************************************************
-void Unpack(glm::vec3& keyboard_origin, glm::quat& keyboard_orientation, std::vector<glm::vec3>& keyboard_markers_markers, glm::quat& reference_orientation, std::vector<glm::vec3>& markers, char* pData);
+void Unpack(glm::vec3& keyboard_origin, glm::quat& keyboard_orientation, std::vector<glm::vec3>& keyboard_markers_markers, std::vector<glm::vec3>& markers, char* pData);
 
 
 
 // receive_packet --
 
-void receive_packet(glm::vec3& keyboard_origin, glm::quat& keyboard_orientation, std::vector<glm::vec3>& keyboard_markers_markers, glm::quat& reference_orientation, std::vector<glm::vec3>& markers, char* buffer, int buffer_size);
+void receive_packet(glm::vec3& keyboard_origin, glm::quat& keyboard_orientation, std::vector<glm::vec3>& keyboard_markers_markers, std::vector<glm::vec3>& markers, char* buffer, int buffer_size);
 
 
 #endif

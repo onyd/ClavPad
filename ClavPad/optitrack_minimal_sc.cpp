@@ -17,6 +17,7 @@
 #include <ws2tcpip.h>
 #endif
 
+#include <string>
 
 int g_mcast_socket = -1;
 void* g_mcast_address = NULL;
@@ -141,7 +142,7 @@ failure:
 //      scope of this function. 
 //
 // *********************************************************************
-void Unpack(glm::vec3 &keyboard_origin, glm::quat &keyboard_orientation, std::vector<glm::vec3> &keyboard_markers_markers, glm::quat &reference_orientation, std::vector<glm::vec3> &markers, char* pData)
+void Unpack(glm::vec3 &keyboard_origin, glm::quat &keyboard_orientation, std::vector<glm::vec3> &keyboard_markers_markers, std::vector<glm::vec3> &markers, char* pData)
 {
     char *ptr = pData;
     int i, j;
@@ -174,6 +175,7 @@ void Unpack(glm::vec3 &keyboard_origin, glm::quat &keyboard_orientation, std::ve
             // Markerset name
             char szName[256];
             strcpy_s(szName, ptr);
+
             int nDataBytes = (int) strlen(szName) + 1;
             ptr += nDataBytes;
             //printf("Model Name: %s\n", szName);
@@ -221,14 +223,13 @@ void Unpack(glm::vec3 &keyboard_origin, glm::quat &keyboard_orientation, std::ve
             float y = 0.0f; memcpy(&y, ptr, 4); ptr += 4;
             float z = 0.0f; memcpy(&z, ptr, 4); ptr += 4;
 
-            keyboard_origin.x = x; keyboard_origin.y = y; keyboard_origin.z = z;
-
             float qx = 0; memcpy(&qx, ptr, 4); ptr += 4;
             float qy = 0; memcpy(&qy, ptr, 4); ptr += 4;
             float qz = 0; memcpy(&qz, ptr, 4); ptr += 4;
             float qw = 0; memcpy(&qw, ptr, 4); ptr += 4;
 
-            keyboard_orientation.x = qx; keyboard_orientation.y = qy; keyboard_orientation.z = qz; keyboard_orientation.w = qw;
+			keyboard_orientation.x = qx; keyboard_orientation.y = qy; keyboard_orientation.z = qz; keyboard_orientation.w = qw;
+			keyboard_origin.x = x; keyboard_origin.y = y; keyboard_origin.z = z;
 
             // NatNet version 2.0 and later
 
@@ -247,7 +248,7 @@ void Unpack(glm::vec3 &keyboard_origin, glm::quat &keyboard_orientation, std::ve
 
 // receive_packet --
 
-void receive_packet(glm::vec3& keyboard_origin, glm::quat& keyboard_orientation, std::vector<glm::vec3>& keyboard_markers_markers, glm::quat& reference_orientation, std::vector<glm::vec3>& markers, char* buffer, int buffer_size)
+void receive_packet(glm::vec3& keyboard_origin, glm::quat& keyboard_orientation, std::vector<glm::vec3>& keyboard_markers_markers, std::vector<glm::vec3>& markers, char* buffer, int buffer_size)
 {
 	int				nbytes;
 	struct sockaddr_in		peer;
@@ -260,6 +261,6 @@ void receive_packet(glm::vec3& keyboard_origin, glm::quat& keyboard_orientation,
 	#endif
 
 	if (nbytes > 0)
-		Unpack(keyboard_origin, keyboard_orientation, keyboard_markers_markers, reference_orientation, markers, buffer);
+		Unpack(keyboard_origin, keyboard_orientation, keyboard_markers_markers, markers, buffer);
 }
 
