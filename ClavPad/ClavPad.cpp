@@ -30,6 +30,7 @@ ClavPad::ClavPad(bool mouse_mode) : m_mouse_mode(mouse_mode)
         open_udp_multicast_socket(k_default_port, k_default_mcast_group, e_true, "10.10.0.8");
     m_last_activity_start = std::chrono::system_clock::now();
     m_idle_start = std::chrono::system_clock::now();
+    m_last_click_time = std::chrono::system_clock::now();
 }
 
 ClavPad::~ClavPad()
@@ -83,9 +84,9 @@ void ClavPad::run()
                     m_input_sender.SendMousePos(p->first, p->second);
             }
         } 
-        if (!mouse_event && m_state == State::CURSOR_CLICK) {
+        if (!m_mouse_mode && m_state == State::CURSOR_CLICK) {
             m_input_sender.SendClick();
-            updateState(State::IDLE);
+            updateState(State::CURSOR_MOVE);
         }
 
         // Update optitrack data
@@ -160,7 +161,7 @@ void ClavPad::calibrate()
     m_finger_distance_threshold /= total_nb_values;
     m_finger_distance_threshold += EPS;
 
-    m_acc_threshold = 0.9 * min_mean_acc;
+    m_acc_threshold = 0.5 * min_mean_acc;
 
     std::cout << "End calibration" << std::endl;
 }
@@ -228,10 +229,10 @@ void ClavPad::parseInput()
     }
 
     if (!m_mouse_mode) {
-        // Should we go in CURSOR_CLICK mode
-        if (m_state == State::CURSOR_MOVE || m_state == State::MOUSE_MOVE) {
+        if (m_state == State::CURSOR_MOVE) {
+            // Should we go in CURSOR_CLICK mode
             float current_vertical_velocity = (m_data.markers.front().z - m_last_heights) * FRAME_RATE;
-            float current_acc = (current_vertical_velocity - m_vertical_accelerations.back()) * FRAME_RATE;
+            float current_acc = (current_vertical_velocity - m_last_vertical_velocity) * FRAME_RATE;
 
             // Update velocity and acceleration
             m_last_vertical_velocity = current_vertical_velocity;
@@ -245,8 +246,10 @@ void ClavPad::parseInput()
                     mean_acc += acc;
                 mean_acc /= m_vertical_accelerations.size();
 
-                if (mean_acc < m_acc_threshold) {
+                auto click_span = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - m_last_click_time);
+                if (click_span.count() > 50 && mean_acc < m_acc_threshold) {
                     updateState(State::CURSOR_CLICK);
+                    m_last_click_time = std::chrono::system_clock::now();
                     return;
                 }
             }
@@ -254,10 +257,11 @@ void ClavPad::parseInput()
 
         // Should we go in CURSOR_MOVE mode
         float distance_fingers = glm::distance(m_data.markers[0], m_data.markers[1]);
-        if (distance_fingers < m_finger_distance_threshold
-            && ++m_state_frame_count >= VALIDATION_FRAME_COUNT) {
-            updateState(State::CURSOR_MOVE);
-            return;
+        if (distance_fingers < m_finger_distance_threshold) {
+            if (++m_state_frame_count >= VALIDATION_FRAME_COUNT) {
+                updateState(State::CURSOR_MOVE);
+                return;
+            }
         }
         else { // 'Open' finger => reset counter
             m_state_frame_count = 0;

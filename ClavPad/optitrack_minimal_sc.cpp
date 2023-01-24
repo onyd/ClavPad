@@ -191,9 +191,7 @@ void Unpack(glm::vec3 &keyboard_origin, glm::quat &keyboard_orientation, std::ve
                 float y = 0; memcpy(&y, ptr, 4); ptr += 4;
                 float z = 0; memcpy(&z, ptr, 4); ptr += 4;
 	
-				if (strcmp(szName, "keyboard") == 0) {
-					keyboard_markers_markers.push_back(glm::vec3(x, y, z));
-				}
+				keyboard_markers_markers.push_back(glm::vec3(x, y, z));
             }
         }
 

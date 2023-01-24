@@ -55,6 +55,7 @@ private:
     float m_last_heights = 0.0;
 
     POINT m_last_mouse_pos = { 0, 0 };
+    std::chrono::time_point<std::chrono::system_clock> m_last_click_time;
 
     // parameters
     float m_finger_distance_threshold = 0.0;
