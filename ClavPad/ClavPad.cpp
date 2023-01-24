@@ -82,6 +82,10 @@ void ClavPad::run()
                 if (p.has_value())
                     m_input_sender.SendMousePos(p->first, p->second);
             }
+        } 
+        if (!mouse_event && m_state == State::CURSOR_CLICK) {
+            m_input_sender.SendClick();
+            updateState(State::IDLE);
         }
 
         // Update optitrack data
@@ -94,7 +98,7 @@ void ClavPad::run()
 void ClavPad::update()
 {
     if (!m_mouse_mode)
-        update();
+        m_data.update();
 }
 
 void ClavPad::calibrate() 

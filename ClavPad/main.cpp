@@ -7,7 +7,7 @@
                  
 int main()
 {
-	ClavPad clav(true);
+	ClavPad clav(false);
 	clav.calibrate();
 
 	clav.run();
